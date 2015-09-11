@@ -17,13 +17,13 @@ spring:
         useServerPrepStmts: true
 
     jpa:
-        database-platform: org.hibernate.dialect.MySQLInnoDBDialect
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         database: MYSQL
         openInView: false
-        show_sql: false
+        show_sql: true
         generate-ddl: false
         hibernate:
-            ddl-auto: none
+            ddl-auto: update
             naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
 
 http:
