@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
-public class LogsResource {
+public class LogsController {
 
     @RequestMapping(value = "/logs",
             method = RequestMethod.GET,
