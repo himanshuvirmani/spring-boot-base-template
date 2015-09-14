@@ -21,29 +21,23 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.springboot.demo.domain.util.CustomDateTimeDeserializer;
 import com.springboot.demo.domain.util.CustomDateTimeSerializer;
 import com.springboot.demo.web.rest.dto.ReviewDetailsDto;
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
 @Data
+@EqualsAndHashCode(callSuper=true)
 @Entity
-public class Review implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue
-	private Long id;
+public class Review extends BaseEntity {
 
 	@ManyToOne(optional = false)
 	private Hotel hotel;
@@ -63,12 +57,15 @@ public class Review implements Serializable {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)
+	@Audited
 	private TripType tripType;
 
 	@Column(nullable = false)
+	@Audited
 	private String title;
 
 	@Column(nullable = false, length = 5000)
+	@Audited
 	private String details;
 
 	protected Review() {

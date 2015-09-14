@@ -1,6 +1,8 @@
 package com.springboot.demo.config;
 
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+import com.springboot.demo.common.AuditingDateTimeProvider;
+import com.springboot.demo.common.DateTimeService;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.util.Arrays;
@@ -13,11 +15,14 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.data.auditing.DateTimeProvider;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 
 @Configuration
+@EnableJpaAuditing(dateTimeProviderRef = "dateTimeProvider")
 @EnableJpaRepositories("com.springboot.demo.repository")
 @EnableTransactionManagement
 public class DatabaseConfiguration implements EnvironmentAware {
@@ -78,5 +83,14 @@ public class DatabaseConfiguration implements EnvironmentAware {
   @Bean
   public Hibernate4Module hibernate4Module() {
     return new Hibernate4Module();
+  }
+
+  @Bean DateTimeProvider dateTimeProvider(DateTimeService dateTimeService) {
+    return new AuditingDateTimeProvider(dateTimeService);
+  }
+
+
+  @Bean DateTimeProvider constantDateTimeProvider(DateTimeService constantDateTimeService) {
+    return new AuditingDateTimeProvider(constantDateTimeService);
   }
 }
