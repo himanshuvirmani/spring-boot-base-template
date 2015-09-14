@@ -25,6 +25,11 @@ spring:
         hibernate:
             ddl-auto: update
             naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+        properties:
+                    hibernate.cache.use_second_level_cache: false
+                    hibernate.cache.use_query_cache: false
+                    hibernate.generate_statistics: true
+                    org.hibernate.envers.audit_table_suffix: _history
 
 http:
     cache:
