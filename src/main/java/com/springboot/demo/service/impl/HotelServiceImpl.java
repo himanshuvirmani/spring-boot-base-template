@@ -21,7 +21,7 @@ import com.springboot.demo.domain.Hotel;
 import com.springboot.demo.domain.Rating;
 import com.springboot.demo.domain.RatingCount;
 import com.springboot.demo.domain.Review;
-import com.springboot.demo.domain.ReviewDetails;
+import com.springboot.demo.web.rest.dto.ReviewDetailsDto;
 import com.springboot.demo.repository.HotelRepository;
 import com.springboot.demo.repository.ReviewRepository;
 import com.springboot.demo.service.HotelService;
@@ -71,7 +71,7 @@ public class HotelServiceImpl implements HotelService {
 	}
 
 	@Override
-	public Review addReview(Hotel hotel, ReviewDetails details) {
+	public Review addReview(Hotel hotel, ReviewDetailsDto details) {
 		Review review = new Review(hotel, 1, details);
 		return reviewRepository.save(review);
 	}

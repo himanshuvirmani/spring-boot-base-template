@@ -19,7 +19,7 @@ package com.springboot.demo.service;
 import com.springboot.demo.domain.City;
 import com.springboot.demo.domain.Hotel;
 import com.springboot.demo.domain.Review;
-import com.springboot.demo.domain.ReviewDetails;
+import com.springboot.demo.web.rest.dto.ReviewDetailsDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -31,7 +31,7 @@ public interface HotelService {
 
 	Review getReview(Hotel hotel, int index);
 
-	Review addReview(Hotel hotel, ReviewDetails details);
+	Review addReview(Hotel hotel, ReviewDetailsDto details);
 
 	ReviewsSummary getReviewSummary(Hotel hotel);
 
