@@ -16,8 +16,12 @@
 
 package com.springboot.demo.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.springboot.demo.domain.util.CustomDateTimeDeserializer;
+import com.springboot.demo.domain.util.CustomDateTimeSerializer;
+import com.springboot.demo.web.rest.dto.ReviewDetailsDto;
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,10 +29,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import lombok.Data;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 
+@Data
 @Entity
 public class Review implements Serializable {
 
@@ -48,9 +55,11 @@ public class Review implements Serializable {
 	@Enumerated(EnumType.ORDINAL)
 	private Rating rating;
 
-	@Column(nullable = false)
-	@Temporal(TemporalType.DATE)
-	private Date checkInDate;
+	@NotNull
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	@JsonSerialize(using = CustomDateTimeSerializer.class)
+	@JsonDeserialize(using = CustomDateTimeDeserializer.class)
+	private DateTime checkInDate;
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.ORDINAL)
@@ -65,7 +74,7 @@ public class Review implements Serializable {
 	protected Review() {
 	}
 
-	public Review(Hotel hotel, int index, ReviewDetails details) {
+	public Review(Hotel hotel, int index, ReviewDetailsDto details) {
 		Assert.notNull(hotel, "Hotel must not be null");
 		Assert.notNull(details, "Details must not be null");
 		this.hotel = hotel;
@@ -77,51 +86,4 @@ public class Review implements Serializable {
 		this.details = details.getDetails();
 	}
 
-	public Hotel getHotel() {
-		return this.hotel;
-	}
-
-	public int getIndex() {
-		return this.index;
-	}
-
-	public Rating getRating() {
-		return this.rating;
-	}
-
-	public void setRating(Rating rating) {
-		this.rating = rating;
-	}
-
-	public Date getCheckInDate() {
-		return this.checkInDate;
-	}
-
-	public void setCheckInDate(Date checkInDate) {
-		this.checkInDate = checkInDate;
-	}
-
-	public TripType getTripType() {
-		return this.tripType;
-	}
-
-	public void setTripType(TripType tripType) {
-		this.tripType = tripType;
-	}
-
-	public String getTitle() {
-		return this.title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDetails() {
-		return this.details;
-	}
-
-	public void setDetails(String details) {
-		this.details = details;
-	}
 }
