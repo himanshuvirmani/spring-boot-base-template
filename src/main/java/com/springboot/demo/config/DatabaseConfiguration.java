@@ -31,15 +31,12 @@ public class DatabaseConfiguration implements EnvironmentAware {
 
   private RelaxedPropertyResolver dataSourcePropertyResolver;
 
-  private RelaxedPropertyResolver liquiBasePropertyResolver;
-
   private Environment env;
 
   @Override
   public void setEnvironment(Environment env) {
     this.env = env;
     this.dataSourcePropertyResolver = new RelaxedPropertyResolver(env, "spring.datasource.");
-    this.liquiBasePropertyResolver = new RelaxedPropertyResolver(env, "liquiBase.");
   }
 
   @Bean(destroyMethod = "close")
@@ -88,7 +85,6 @@ public class DatabaseConfiguration implements EnvironmentAware {
   @Bean DateTimeProvider dateTimeProvider(DateTimeService dateTimeService) {
     return new AuditingDateTimeProvider(dateTimeService);
   }
-
 
   @Bean DateTimeProvider constantDateTimeProvider(DateTimeService constantDateTimeService) {
     return new AuditingDateTimeProvider(constantDateTimeService);

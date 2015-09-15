@@ -33,12 +33,12 @@ bootRun {
   addResources = false
 }
 
-if (project.hasProperty('prod')) {
+if (project.hasProperty('prod')) {  //./gradlew -Pprod bootRun
   apply from: 'profile_prod.gradle'
 } else if (project.hasProperty('fast')) {
   apply from: 'profile_fast.gradle'
 } else {
-  apply from: 'profile_prod.gradle'
+  apply from: 'profile_dev.gradle'
 }
 
 sourceCompatibility = 1.8
@@ -60,15 +60,11 @@ dependencies {
   compile group: 'io.dropwizard.metrics', name: 'metrics-core'
   compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: dropwizard_metrics_version
 
-  /*    compile (group: 'org.liquibase', name: 'liquibase-core', version: liquibase_core_version) {
-          exclude(module: 'jetty-servlet')
-      }
-      compile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version*/
   compile group: 'org.springframework.boot', name: 'spring-boot-actuator'
   compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
   compile group: 'org.springframework.boot', name: 'spring-boot-loader-tools'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-logging'
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty'
@@ -120,7 +116,6 @@ dependencies {
   testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
   testCompile group: 'junit', name: 'junit'
   testCompile group: 'org.mockito', name: 'mockito-core'
-  //    testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version
   testCompile group: 'org.hamcrest', name: 'hamcrest-library'
 }
 
