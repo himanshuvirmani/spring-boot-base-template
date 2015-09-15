@@ -1,11 +1,12 @@
 package com.springboot.demo.common;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * This class is used in our integration tests and it always returns the same time. This gives us
@@ -16,32 +17,32 @@ import org.springframework.stereotype.Component;
 @Component("constantDateTimeService")
 public class ConstantDateTimeService implements DateTimeService {
 
-  public static final String CURRENT_DATE_AND_TIME = getConstantDateAndTime();
+    public static final String CURRENT_DATE_AND_TIME = getConstantDateAndTime();
 
-  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ConstantDateTimeService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConstantDateTimeService.class);
 
-  private static String getConstantDateAndTime() {
-    return "2015-07-19T12:52:28" +
-        getSystemZoneOffset() +
-        getSystemZoneId();
-  }
+    private static String getConstantDateAndTime() {
+        return "2015-07-19T12:52:28" +
+                getSystemZoneOffset() +
+                getSystemZoneId();
+    }
 
-  private static String getSystemZoneOffset() {
-    return ZonedDateTime.now().getOffset().toString();
-  }
+    private static String getSystemZoneOffset() {
+        return ZonedDateTime.now().getOffset().toString();
+    }
 
-  private static String getSystemZoneId() {
-    return "[" + ZoneId.systemDefault().toString() + "]";
-  }
+    private static String getSystemZoneId() {
+        return "[" + ZoneId.systemDefault().toString() + "]";
+    }
 
-  @Override
-  public ZonedDateTime getCurrentDateAndTime() {
-    ZonedDateTime constantDateAndTime = ZonedDateTime.from(FORMATTER.parse(CURRENT_DATE_AND_TIME));
+    @Override
+    public ZonedDateTime getCurrentDateAndTime() {
+        ZonedDateTime constantDateAndTime = ZonedDateTime.from(FORMATTER.parse(CURRENT_DATE_AND_TIME));
 
-    LOGGER.info("Returning constant date and time: {}", constantDateAndTime);
+        LOGGER.info("Returning constant date and time: {}", constantDateAndTime);
 
-    return constantDateAndTime;
-  }
+        return constantDateAndTime;
+    }
 }

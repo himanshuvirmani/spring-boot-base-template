@@ -17,10 +17,7 @@
 package com.springboot.demo.web.rest;
 
 import com.springboot.demo.domain.City;
-import com.springboot.demo.domain.Hotel;
-import com.springboot.demo.domain.Review;
 import com.springboot.demo.service.CityService;
-import com.springboot.demo.service.HotelService;
 import com.springboot.demo.service.criteria.CitySearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,16 +32,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/city")
 public class CityController {
 
-	@Autowired
-	private CityService cityService;
+    @Autowired
+    private CityService cityService;
 
-	@RequestMapping("/search/{keyword}")
-	@ResponseBody
-	@Transactional(readOnly = true)
-	public Page<City> search(@PathVariable("keyword") String keyword) {
-		CitySearchCriteria criteria = new CitySearchCriteria(keyword);
-		PageRequest pageRequest = new PageRequest(1,4);
-		return this.cityService.findCities(criteria, pageRequest);
-	}
+    @RequestMapping("/search/{keyword}")
+    @ResponseBody
+    @Transactional(readOnly = true)
+    public Page<City> search(@PathVariable("keyword") String keyword) {
+        CitySearchCriteria criteria = new CitySearchCriteria(keyword);
+        PageRequest pageRequest = new PageRequest(1, 4);
+        return this.cityService.findCities(criteria, pageRequest);
+    }
 
 }

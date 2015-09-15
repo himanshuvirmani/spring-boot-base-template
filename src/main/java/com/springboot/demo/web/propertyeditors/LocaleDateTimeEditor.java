@@ -1,11 +1,12 @@
 package com.springboot.demo.web.propertyeditors;
 
-import java.beans.PropertyEditorSupport;
-import java.util.Date;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.util.StringUtils;
+
+import java.beans.PropertyEditorSupport;
+import java.util.Date;
 
 /**
  * Custom PropertyEditorSupport to convert from String to
@@ -51,8 +52,8 @@ public class LocaleDateTimeEditor extends PropertyEditorSupport {
      * @throws IllegalArgumentException
      */
     @Override
-    public void setAsText( String text ) throws IllegalArgumentException {
-        if ( allowEmpty && !StringUtils.hasText(text) ) {
+    public void setAsText(String text) throws IllegalArgumentException {
+        if (allowEmpty && !StringUtils.hasText(text)) {
             // Treat empty String as null value.
             setValue(null);
         } else {

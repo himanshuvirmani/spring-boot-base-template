@@ -17,5 +17,5 @@
 package com.springboot.demo.domain;
 
 public enum TripType {
-	BUSINESS, COUPLES, FAMILY, FRIENDS, SOLO
+    BUSINESS, COUPLES, FAMILY, FRIENDS, SOLO
 }
