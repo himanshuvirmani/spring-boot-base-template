@@ -105,6 +105,7 @@ dependencies {
   compile(group: 'io.springfox', name: 'springfox-swagger2', version: springfox_version) {
     exclude module: 'mapstruct'
   }
+  compile group: 'io.springfox', name: 'springfox-swagger-ui', version: springfox_version
 
   runtime("com.h2database:h2")
   runtime("mysql:mysql-connector-java")

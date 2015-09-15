@@ -19,13 +19,16 @@ package com.springboot.demo.web.rest;
 import com.springboot.demo.domain.City;
 import com.springboot.demo.service.CityService;
 import com.springboot.demo.service.criteria.CitySearchCriteria;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -35,7 +38,8 @@ public class CityController {
     @Autowired
     private CityService cityService;
 
-    @RequestMapping("/search/{keyword}")
+    @RequestMapping(value = "/search/{keyword}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Transactional(readOnly = true)
     public Page<City> search(@PathVariable("keyword") String keyword) {

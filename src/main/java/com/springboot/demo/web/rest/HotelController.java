@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +48,8 @@ public class HotelController {
     @Autowired
     private HotelService hotelService;
 
-    @RequestMapping("/city/{city}/country/{country}/hotel/{hotel}")
+    @RequestMapping(value = "/city/{city}/country/{country}/hotel/{hotel}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Transactional(readOnly = true)
     public Hotel getHotel(@PathVariable("city") String city,
@@ -56,7 +58,8 @@ public class HotelController {
         return this.hotelService.getHotel(citi, hotel);
     }
 
-    @RequestMapping("/city/{city}/country/{country}/hotel/{hotel}/review")
+    @RequestMapping(value = "/city/{city}/country/{country}/hotel/{hotel}/review", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Transactional(readOnly = true)
     public Page<Review> getHotelReview(@PathVariable("city") String city,
@@ -67,7 +70,7 @@ public class HotelController {
         return this.hotelService.getReviews(this.hotelService.getHotel(citi, hotel), pageRequest);
     }
 
-    @RequestMapping(value = "/city/{city}/country/{country}/hotel/{hotel}/review", method = RequestMethod.POST)
+    @RequestMapping(value = "/city/{city}/country/{country}/hotel/{hotel}/review", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Review addHotelReview(@PathVariable("city") String city,
                                  @PathVariable("country") String country, @PathVariable("hotel") String hotel, @RequestBody
