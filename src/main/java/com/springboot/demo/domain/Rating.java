@@ -17,5 +17,5 @@
 package com.springboot.demo.domain;
 
 public enum Rating {
-	TERRIBLE, POOR, AVERAGE, GOOD, EXCELLENT,
+    TERRIBLE, POOR, AVERAGE, GOOD, EXCELLENT,
 }

@@ -1,9 +1,10 @@
 package com.springboot.demo.common;
 
-import java.time.ZonedDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.time.ZonedDateTime;
 
 /**
  * This class returns the current time.
@@ -13,14 +14,14 @@ import org.springframework.stereotype.Component;
 @Component("dateTimeService")
 public class CurrentTimeDateTimeService implements DateTimeService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CurrentTimeDateTimeService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CurrentTimeDateTimeService.class);
 
-  @Override
-  public ZonedDateTime getCurrentDateAndTime() {
-    ZonedDateTime currentDateAndTime = ZonedDateTime.now();
+    @Override
+    public ZonedDateTime getCurrentDateAndTime() {
+        ZonedDateTime currentDateAndTime = ZonedDateTime.now();
 
-    LOGGER.info("Returning current date and time: {}", currentDateAndTime);
+        LOGGER.info("Returning current date and time: {}", currentDateAndTime);
 
-    return currentDateAndTime;
-  }
+        return currentDateAndTime;
+    }
 }

@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface CityService {
 
-  Page<City> findCities(CitySearchCriteria criteria, Pageable pageable);
+    Page<City> findCities(CitySearchCriteria criteria, Pageable pageable);
 
-  City getCity(String name, String country);
+    City getCity(String name, String country);
 
-  Page<HotelSummary> getHotels(City city, Pageable pageable);
+    Page<HotelSummary> getHotels(City city, Pageable pageable);
 }

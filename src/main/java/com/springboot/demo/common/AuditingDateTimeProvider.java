@@ -1,23 +1,24 @@
 package com.springboot.demo.common;
 
+import org.springframework.data.auditing.DateTimeProvider;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import org.springframework.data.auditing.DateTimeProvider;
 
 /**
  * This class obtains the current time by using a {@link DateTimeService}
  * object. The reason for this is that we can use a different implementation in our integration tests.
- *
+ * <p/>
  * In other words:
  * <ul>
- *     <li>
- *         Our application always returns the correct time because it uses the
- *         {@link CurrentTimeDateTimeService} class.
- *     </li>
- *     <li>
- *         When our integration tests are running, we can return a constant time which gives us the possibility
- *         to assert the creation and modification times saved to the database.
- *     </li>
+ * <li>
+ * Our application always returns the correct time because it uses the
+ * {@link CurrentTimeDateTimeService} class.
+ * </li>
+ * <li>
+ * When our integration tests are running, we can return a constant time which gives us the possibility
+ * to assert the creation and modification times saved to the database.
+ * </li>
  * </ul>
  *
  * @author Petri Kainulainen
