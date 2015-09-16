@@ -71,7 +71,7 @@ dependencies {
   compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web') {
     exclude module: 'spring-boot-starter-tomcat'
   }
-
+  compile 'org.springframework.statemachine:spring-statemachine-core:1.0.0.RC1'
 
   compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org',
           version: jackson_version

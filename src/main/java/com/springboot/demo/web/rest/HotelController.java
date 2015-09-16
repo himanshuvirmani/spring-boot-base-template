@@ -19,6 +19,7 @@ package com.springboot.demo.web.rest;
 import com.springboot.demo.domain.City;
 import com.springboot.demo.domain.Hotel;
 import com.springboot.demo.domain.Review;
+import com.springboot.demo.domain.enums.HotelStatusEnum;
 import com.springboot.demo.service.CityService;
 import com.springboot.demo.service.HotelService;
 import com.springboot.demo.web.rest.dto.ReviewDetailsDto;
@@ -76,7 +77,15 @@ public class HotelController {
                                  @PathVariable("country") String country, @PathVariable("hotel") String hotel, @RequestBody
                                  ReviewDetailsDto reviewDetails) {
         final City citi = cityService.getCity(city, country);
-        log.info("Review Details date : - " + reviewDetails.toString());
         return this.hotelService.addReview(this.hotelService.getHotel(citi, hotel), reviewDetails);
+    }
+
+    @RequestMapping(value = "/city/{city}/country/{country}/hotel/{hotel}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Hotel manageHotel(@PathVariable("city") String city,
+                              @PathVariable("country") String country, @PathVariable("hotel") String hotel, @RequestBody
+                                 Hotel hote) {
+        final City citi = cityService.getCity(city, country);
+        return this.hotelService.manageHotel(citi, hotel, hote.getStatus());
     }
 }
