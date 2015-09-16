@@ -29,6 +29,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -38,7 +39,7 @@ public class CityController {
 	@Autowired
 	private CityService cityService;
 
-	@RequestMapping("/search/{keyword}")
+	@RequestMapping(value = "/search/{keyword}", method = RequestMethod.GET)
 	@ResponseBody
 	@Transactional(readOnly = true)
 	public Page<City> search(@PathVariable("keyword") String keyword) {
