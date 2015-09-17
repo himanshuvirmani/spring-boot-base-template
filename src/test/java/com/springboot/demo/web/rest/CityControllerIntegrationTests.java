@@ -3,24 +3,38 @@ package com.springboot.demo.web.rest;
 import com.springboot.demo.Application;
 import com.springboot.demo.domain.City;
 import com.springboot.demo.service.CityService;
+import com.springboot.demo.service.criteria.CitySearchCriteria;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.WebApplicationContext;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 /**
@@ -34,6 +48,12 @@ import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
  * as an alternative to the standard spring-test @ContextConfiguration annotation.
  * If you use @SpringApplicationConfiguration to configure the ApplicationContext used in your tests,
  * it will be created via SpringApplication and you will get the additional Spring Boot features.
+ */
+//@SpringApplicationConfiguration(classes = Application.class)
+
+/**
+ * Note the use of the MockServletContext to set up an empty WebApplicationContext
+ * so the HelloController can be created in the @Before and passed to MockMvcBuilders.standaloneSetup().
  */
 @SpringApplicationConfiguration(classes = Application.class)
 
@@ -58,7 +78,7 @@ import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
  * Additionally you can set the server.port and management.port properties to 0 in order to
  * run your integration tests using random ports.
  */
-@IntegrationTest
+//@IntegrationTest
 
 
 /**
@@ -69,25 +89,32 @@ import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
 public class CityControllerIntegrationTests {
 
 
-    @Autowired
-    private CityService cityService;
-
     final String BASE_URL = "http://localhost:8080/";
 
+    private MockMvc mvc;
+
+    @Mock
+    private CityService cityService;
+
+    @Autowired
+    private WebApplicationContext wac;
+
     @Before
-    public void setup() {
+    public void setUp() throws Exception {
+//        mvc = MockMvcBuilders.standaloneSetup(new CityController()).build();
+        this.mvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
 
     @Test
-    public void shouldSearchCity() {
+    public void shouldSearchCity() throws Exception {
+        CitySearchCriteria criteria = new CitySearchCriteria("T");
+        PageRequest pageRequest = new PageRequest(1, 4);
+        Mockito.when(cityService.findCities(criteria, pageRequest)).thenReturn(new PageImpl<City>(new ArrayList<City>()));
 
-        RestTemplate rest = new TestRestTemplate();
-
-        ResponseEntity<City> response = rest.getForEntity(BASE_URL, City.class, Collections.EMPTY_MAP);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-
-        City cities = response.getBody();
+        mvc.perform(MockMvcRequestBuilders.get("/city/search/T").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        System.out.println(content());
     }
-
 }
+
