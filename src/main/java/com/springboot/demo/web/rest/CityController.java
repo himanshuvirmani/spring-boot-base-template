@@ -19,6 +19,7 @@ package com.springboot.demo.web.rest;
 import com.springboot.demo.domain.City;
 import com.springboot.demo.service.CityService;
 import com.springboot.demo.service.criteria.CitySearchCriteria;
+import com.springboot.demo.web.rest.errors.CityNotFoundException;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,7 +47,11 @@ public class CityController {
     public Page<City> search(@PathVariable("keyword") String keyword) {
         CitySearchCriteria criteria = new CitySearchCriteria(keyword);
         PageRequest pageRequest = new PageRequest(1, 4);
-        return this.cityService.findCities(criteria, pageRequest);
+        Page<City> result = this.cityService.findCities(criteria, pageRequest);
+        if (result == null || result.getTotalElements() == 0) {
+            throw new CityNotFoundException();
+        }
+        return result;
     }
 
 }

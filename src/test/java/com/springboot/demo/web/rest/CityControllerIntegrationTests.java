@@ -1,41 +1,28 @@
 package com.springboot.demo.web.rest;
 
 import com.springboot.demo.Application;
-import com.springboot.demo.domain.City;
 import com.springboot.demo.service.CityService;
-import com.springboot.demo.service.criteria.CitySearchCriteria;
+import com.springboot.demo.util.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockServletContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
-import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by neerajsi on 16/09/15.
@@ -86,6 +73,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *  Explore on test utils  like EnvironmentTestUtils, ConfigFileApplicationContextInitializer, OutputCapture
  *
  */
+
+@ActiveProfiles("test")
 public class CityControllerIntegrationTests {
 
 
@@ -93,8 +82,8 @@ public class CityControllerIntegrationTests {
 
     private MockMvc mvc;
 
-    @Mock
-    private CityService cityService;
+    @Autowired
+    private CityService cityServiceMock;
 
     @Autowired
     private WebApplicationContext wac;
@@ -108,13 +97,21 @@ public class CityControllerIntegrationTests {
 
     @Test
     public void shouldSearchCity() throws Exception {
-        CitySearchCriteria criteria = new CitySearchCriteria("T");
-        PageRequest pageRequest = new PageRequest(1, 4);
-        Mockito.when(cityService.findCities(criteria, pageRequest)).thenReturn(new PageImpl<City>(new ArrayList<City>()));
 
-        mvc.perform(MockMvcRequestBuilders.get("/city/search/T").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-        System.out.println(content());
+        ResultActions s = mvc.perform(MockMvcRequestBuilders.get("/city/search/T")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(4)));
+
+        System.out.println("Hello" + s.andReturn().getResponse().getContentAsString());
+    }
+
+    @Test
+    public void searchCity_CityNotFoundException_ShouldReturnHttpStatusCode404() throws Exception {
+
+        mvc.perform(MockMvcRequestBuilders.get("/city/search/TTT").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+        System.out.println("Hello" + content());
     }
 }
 
