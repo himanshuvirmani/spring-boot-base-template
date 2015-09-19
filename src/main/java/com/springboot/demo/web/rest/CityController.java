@@ -20,21 +20,16 @@ import com.springboot.demo.domain.City;
 import com.springboot.demo.service.CityService;
 import com.springboot.demo.service.criteria.CitySearchCriteria;
 import com.springboot.demo.web.rest.errors.CityNotFoundException;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/city")
-public class CityController {
+public class CityController extends BaseController {
 
     @Autowired
     private CityService cityService;

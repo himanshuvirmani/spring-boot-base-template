@@ -16,13 +16,18 @@
 
 package com.springboot.demo.domain;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
 
+@Data
 @Entity
+@NoArgsConstructor
 public class City implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,33 +48,10 @@ public class City implements Serializable {
     @Column(nullable = false)
     private String map;
 
-    protected City() {
-    }
-
     public City(String name, String country) {
         super();
         this.name = name;
         this.country = country;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public String getState() {
-        return this.state;
-    }
-
-    public String getCountry() {
-        return this.country;
-    }
-
-    public String getMap() {
-        return this.map;
-    }
-
-    @Override
-    public String toString() {
-        return getName() + "," + getState() + "," + getCountry();
-    }
 }

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api")
-public class LogsController {
+public class LogsController extends BaseController {
 
     @RequestMapping(value = "/logs",
             method = RequestMethod.GET,

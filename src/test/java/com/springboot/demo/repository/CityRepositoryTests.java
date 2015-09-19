@@ -1,5 +1,7 @@
 package com.springboot.demo.repository;
 
+import com.springboot.demo.AbstractControllerTest;
+import com.springboot.demo.AbstractTest;
 import com.springboot.demo.Application;
 import com.springboot.demo.domain.City;
 import org.junit.Test;
@@ -12,22 +14,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
  * Created by neerajsi on 18/09/15.
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration
-@ActiveProfiles("test")
-public class CityRepositoryTests {
+public class CityRepositoryTests extends AbstractTest {
 
     @Autowired
     private CityRepository cityRepository;

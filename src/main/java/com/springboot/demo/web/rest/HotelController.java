@@ -29,13 +29,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/hotel")
-public class HotelController {
+public class HotelController extends BaseController {
 
     private final Logger log = LoggerFactory.getLogger(HotelController.class);
 
