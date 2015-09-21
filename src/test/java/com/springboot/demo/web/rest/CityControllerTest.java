@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by himanshu.virmani on 19/09/15.
  */
 @Transactional
-public class CityControllerTest extends AbstractControllerTest{
+public class CityControllerTest extends AbstractControllerTest {
 
     @Mock
     private CityService cityService;
@@ -53,7 +53,7 @@ public class CityControllerTest extends AbstractControllerTest{
         // Create some test data
         Page<City> list = getEntityListStubData();
 
-        when(cityService.findCities(criteria,pageRequest)).thenReturn(list);
+        when(cityService.findCities(criteria, pageRequest)).thenReturn(list);
 
         ResultActions s = mvc.perform(MockMvcRequestBuilders.get("/city/search/T")
                 .accept(MediaType.APPLICATION_JSON))

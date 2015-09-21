@@ -1,21 +1,13 @@
 package com.springboot.demo.repository;
 
-import com.springboot.demo.AbstractControllerTest;
 import com.springboot.demo.AbstractTest;
-import com.springboot.demo.Application;
 import com.springboot.demo.domain.City;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
