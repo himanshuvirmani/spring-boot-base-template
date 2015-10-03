@@ -74,7 +74,6 @@ public class DatabaseConfiguration implements EnvironmentAware {
             config.addDataSourceProperty("prepStmtCacheSqlLimit", dataSourcePropertyResolver
                     .getProperty("prepStmtCacheSqlLimit", "2048"));
         }
-
         return new HikariDataSource(config);
     }
 
