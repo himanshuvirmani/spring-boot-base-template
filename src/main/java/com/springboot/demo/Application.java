@@ -1,15 +1,19 @@
 package com.springboot.demo;
 
 import com.springboot.demo.config.Constants;
+import com.springboot.demo.web.filter.CachingHttpHeadersFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.servlet.DispatcherType;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -24,12 +28,6 @@ public class Application {
     @Inject
     private Environment env;
 
-    /**
-     * Initializes sampleGradle. <p/> Spring profiles can be configured with a program arguments
-     * --spring.profiles.active=your-active-profile <p/> <p> You can find more information on how
-     * profiles work with JHipster on <a href="http://jhipster.github.io/profiles.html">http://jhipster.github.io/profiles.html</a>.
-     * </p>
-     */
     @PostConstruct
     public void initApplication() throws IOException {
         if (env.getActiveProfiles().length == 0) {
@@ -48,6 +46,16 @@ public class Application {
                         "It should not run with both the 'prod' and 'fast' profiles at the same time.");
             }
         }
+    }
+
+    // sample filter bean to test if request/response filtering works.
+    @Bean
+    public FilterRegistrationBean myFilter() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new CachingHttpHeadersFilter(env));
+//        registration.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
+        registration.setDispatcherTypes(DispatcherType.REQUEST);
+        return registration;
     }
 
     /**
