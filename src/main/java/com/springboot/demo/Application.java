@@ -1,9 +1,12 @@
 package com.springboot.demo;
 
+import com.codahale.metrics.JmxReporter;
+import com.codahale.metrics.MetricRegistry;
 import com.springboot.demo.config.Constants;
 import com.springboot.demo.web.filter.CachingHttpHeadersFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
@@ -24,6 +27,9 @@ import java.util.Collection;
 public class Application {
 
     private static final Logger log = LoggerFactory.getLogger(Application.class);
+
+    @Autowired
+    private MetricRegistry registry;
 
     @Inject
     private Environment env;
@@ -85,5 +91,12 @@ public class Application {
 
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
+    }
+
+    @Bean
+    public JmxReporter jmxReporter() {
+            JmxReporter reporter = JmxReporter.forRegistry(registry).build();
+            reporter.start();
+            return reporter;
     }
 }
