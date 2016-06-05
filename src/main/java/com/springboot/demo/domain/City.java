@@ -16,19 +16,24 @@
 
 package com.springboot.demo.domain;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.demo.repository.redis.RedisJsonMapper;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.IOException;
 import java.io.Serializable;
 
 @Data
 @Entity
 @NoArgsConstructor
-public class City implements Serializable {
+public class City implements Serializable, RedisJsonMapper<City>{
 
     private static final long serialVersionUID = 1L;
 
@@ -54,4 +59,25 @@ public class City implements Serializable {
         this.country = country;
     }
 
+    @Override
+    public String toJsonString() {
+        final ObjectMapper jacksonObjectMapper = new ObjectMapper();
+        try {
+            return jacksonObjectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public City fromJson(String json) {
+        final ObjectMapper jacksonObjectMapper = new ObjectMapper();
+        try {
+            return jacksonObjectMapper.readValue(json, City.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

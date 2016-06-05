@@ -67,6 +67,9 @@ dependencies {
   compile group: 'org.springframework.boot', name: 'spring-boot-loader-tools', version: spring_boot_version
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: spring_boot_version
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: spring_boot_version
+  compile(group: 'org.springframework.boot', name: 'spring-boot-starter-redis', version: spring_boot_version) {
+    exclude group: 'commons-logging'
+  }
   compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: spring_boot_version
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: spring_boot_version
   compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version) {

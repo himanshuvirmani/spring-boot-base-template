@@ -4,6 +4,7 @@ import com.springboot.demo.domain.City;
 import com.springboot.demo.domain.HotelSummary;
 import com.springboot.demo.repository.CityRepository;
 import com.springboot.demo.repository.HotelRepository;
+import com.springboot.demo.repository.redis.impl.ValueCacheRedisRepository;
 import com.springboot.demo.service.CityService;
 import com.springboot.demo.service.criteria.CitySearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class CityServiceImpl implements CityService {
     private final CityRepository cityRepository;
 
     private final HotelRepository hotelRepository;
+
+    @Autowired
+    private ValueCacheRedisRepository<City> valueCacheRedisRepository;
 
     @Autowired
     public CityServiceImpl(CityRepository cityRepository, HotelRepository hotelRepository) {
@@ -55,7 +59,13 @@ public class CityServiceImpl implements CityService {
     public City getCity(String name, String country) {
         Assert.notNull(name, "Name must not be null");
         Assert.notNull(country, "Country must not be null");
-        return this.cityRepository.findByNameAndCountryAllIgnoringCase(name, country);
+        City city = valueCacheRedisRepository.get("city:" + name + ":country:" + country, City.class);
+
+        if (city == null) {
+            city = cityRepository.findByNameAndCountryAllIgnoringCase(name, country);
+            if (city != null) valueCacheRedisRepository.put("city:"+name+":country:"+country, city);
+        }
+        return city;
     }
 
     @Override

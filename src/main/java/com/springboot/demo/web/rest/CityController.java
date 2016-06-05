@@ -49,4 +49,16 @@ public class CityController extends BaseController {
         return result;
     }
 
+    @RequestMapping(value = "/{city}/country/{country}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @Transactional(readOnly = true)
+    public City getCity(@PathVariable("city") String city, @PathVariable("country") String country) {
+        City result = this.cityService.getCity(city, country);
+        if (result == null) {
+            throw new CityNotFoundException();
+        }
+        return result;
+    }
+
 }
