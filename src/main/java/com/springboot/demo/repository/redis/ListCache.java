@@ -5,18 +5,18 @@ import java.util.Collection;
 /**
  * Created by himanshu.virmani on 04/06/16.
  */
-public interface ListCache<K, V> {
-    void push(K key, V value, boolean right);
+public interface ListCache<V extends RedisJsonMapper> {
+    void push(String key, V value, boolean right);
 
-    void multiAdd(K key, Collection<V> values, boolean right);
+    void multiAdd(String key, Collection<V> values, boolean right);
 
-    Collection<V> get(K key);
+    Collection<V> get(String key, Class<V> clazz);
 
-    V pop(K key, boolean right);
+    V pop(String key, boolean right, Class<V> clazz);
 
-    void delete(K key);
+    void delete(String key);
 
-    void trim(K key, int start, int end);
+    void trim(String key, int start, int end);
 
-    Long size(K key);
+    Long size(String key);
 }
