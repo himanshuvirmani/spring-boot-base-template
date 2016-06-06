@@ -90,6 +90,8 @@ dependencies {
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind',
           version:jackson_version
 
+  compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'
+
   compile(group: 'com.zaxxer', name: 'HikariCP', version: HikariCP_version) {
     exclude(module: 'tools')
   }

@@ -1,46 +1,69 @@
 package com.springboot.demo.repository.redis.impl;
 
 import com.springboot.demo.repository.redis.HashCache;
-import com.springboot.demo.repository.redis.RedisHashMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.hash.DecoratingStringHashMapper;
+import org.springframework.data.redis.hash.HashMapper;
+import org.springframework.data.redis.hash.JacksonHashMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by himanshu.virmani on 04/06/16.
  */
 @Component("hashCacheRedisRepository")
-public class HashCacheRedisRepository<K, V extends RedisHashMapper> implements HashCache<K, V> {
+public class HashCacheRedisRepository<V> implements HashCache<V> {
+
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    private final Logger log = LoggerFactory.getLogger(HashCacheRedisRepository.class);
+
+
+    HashMapper<V, String, String> mapper;
+
     @Override
-    public void put(String key, K hashkey, V value) {
+    public void put(String key, String hashkey, String value) {
         redisTemplate.opsForHash().put(key, hashkey, value);
     }
 
     @Override
     public void multiPut(String key, V obj) {
-        redisTemplate.opsForHash().putAll(key, obj.toMap());
+        if(mapper == null) {
+            mapper = new DecoratingStringHashMapper<>(new JacksonHashMapper<>((Class<V>)
+                    ((ParameterizedType)obj.getClass()
+                            .getGenericSuperclass())
+                            .getActualTypeArguments()[0]));
+        }
+        redisTemplate.opsForHash().putAll(key, mapper.toHash(obj));
     }
 
     @Override
-    public V get(String key, K hashkey) {
-        return (V) redisTemplate.opsForHash().get(key, hashkey);
+    public String get(String key, String hashkey) {
+        return (String) redisTemplate.opsForHash().get(key, hashkey);
     }
 
     @Override
-    public void delete(String key, K hashkey) {
+    public void delete(String key, String hashkey) {
         redisTemplate.opsForHash().delete(key, hashkey);
     }
 
     @Override
-    public List<V> getObjects(String key) {
-        List<V> objs = redisTemplate.opsForHash().values(key).stream().map(obj -> (V) obj).collect(Collectors.toList());
-        return objs;
+    public V multiGet(String key, Class<V> clazz) {
+        if(mapper == null) {
+            mapper = new DecoratingStringHashMapper<>(new JacksonHashMapper<>(clazz));
+        }
+        Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
+        if(map == null || map.isEmpty()) return null;
+        V obj = mapper.fromHash((HashMap<String, String>) (Map) map);
+        return obj;
     }
 
     @Override

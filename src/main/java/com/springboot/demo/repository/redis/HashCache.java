@@ -1,20 +1,19 @@
 package com.springboot.demo.repository.redis;
 
-import java.util.List;
 
 /**
  * Created by himanshu.virmani on 04/06/16.
  */
-public interface HashCache<K, V> {
-    void put(String key, K hashkey, V obj);
+public interface HashCache<V> {
+    void put(String key, String hashkey, String value);
 
     void multiPut(String key, V value);
 
-    V get(String key, K hashkey);
+    String get(String key, String hashkey);
 
-    void delete(String key, K hashkey);
+    void delete(String key, String hashkey);
 
-    List<V> getObjects(String key);
+    V multiGet(String key, Class<V> clazz);
 
     void delete(String key);
 }

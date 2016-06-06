@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -37,20 +35,12 @@ public class ValueCacheRedisRepository<V extends RedisJsonMapper> implements Val
             final String json = redisTemplate.opsForValue().get(key);
 
             if (json == null) return null;
-
-            /*ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
-            Type type = genericSuperclass.getActualTypeArguments()[0];
-            if (type instanceof Class) {
-                return (V)(((Class<V>) type).newInstance().fromJson(json));
-            } else if (type instanceof ParameterizedType) {
-                return (V)(((Class<V>) ((ParameterizedType)type).getRawType()).newInstance().fromJson(json));
-            }*/
-
-
-/*            return (V) (((Class<V>) ((ParameterizedType) this.getClass().
-                    getGenericSuperclass()).getActualTypeArguments()[0]).
-                    newInstance().fromJson(json));*/
-            return (V)(clazz.newInstance().fromJson(json));
+            // this below is returning RedisJsonMapper because this reflection only works
+            // for superclass only
+/*            return (V) ((Class<V>) GenericTypeResolver.
+                    resolveTypeArgument(getClass(), ValueCacheRedisRepository.class)).
+                    newInstance().fromJson(json);*/
+            return (V) (clazz.newInstance().fromJson(json));
         } catch (Exception e) {
             e.printStackTrace();
         }

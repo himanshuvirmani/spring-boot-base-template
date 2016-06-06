@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.demo.repository.redis.RedisJsonMapper;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
