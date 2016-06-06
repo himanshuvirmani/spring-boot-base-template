@@ -11,7 +11,6 @@ import org.springframework.data.redis.hash.JacksonHashMapper;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,8 +25,7 @@ public class HashCacheRedisRepository<V> implements HashCache<V> {
 
     private final Logger log = LoggerFactory.getLogger(HashCacheRedisRepository.class);
 
-
-    HashMapper<V, String, String> mapper;
+    private HashMapper<V, String, String> mapper;
 
     @Override
     public void put(String key, String hashkey, String value) {
@@ -36,6 +34,7 @@ public class HashCacheRedisRepository<V> implements HashCache<V> {
 
     @Override
     public void multiPut(String key, V obj) {
+        if (obj == null) return;
         if(mapper == null) {
             mapper = new DecoratingStringHashMapper<>(new JacksonHashMapper<>((Class<V>)
                     ((ParameterizedType)obj.getClass()
@@ -57,13 +56,12 @@ public class HashCacheRedisRepository<V> implements HashCache<V> {
 
     @Override
     public V multiGet(String key, Class<V> clazz) {
+        final Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
+        if(map == null || map.isEmpty()) return null;
         if(mapper == null) {
             mapper = new DecoratingStringHashMapper<>(new JacksonHashMapper<>(clazz));
         }
-        Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
-        if(map == null || map.isEmpty()) return null;
-        V obj = mapper.fromHash((HashMap<String, String>) (Map) map);
-        return obj;
+        return mapper.fromHash((HashMap<String, String>) (Map) map);
     }
 
     @Override
