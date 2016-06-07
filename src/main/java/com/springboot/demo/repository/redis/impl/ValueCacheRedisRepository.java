@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by himanshu.virmani on 04/06/16.
@@ -55,5 +56,10 @@ public class ValueCacheRedisRepository<V extends RedisJsonMapper> implements Val
     @Override
     public void delete(String key) {
         redisTemplate.delete(key);
+    }
+
+    @Override
+    public void expire(String key, long time, TimeUnit timeUnit) {
+        redisTemplate.expire(key, time, timeUnit);
     }
 }

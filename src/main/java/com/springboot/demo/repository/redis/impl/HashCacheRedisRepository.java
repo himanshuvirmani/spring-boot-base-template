@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by himanshu.virmani on 04/06/16.
@@ -36,10 +37,7 @@ public class HashCacheRedisRepository<V> implements HashCache<V> {
     public void multiPut(String key, V obj) {
         if (obj == null) return;
         if(mapper == null) {
-            mapper = new DecoratingStringHashMapper<>(new JacksonHashMapper<>((Class<V>)
-                    ((ParameterizedType)obj.getClass()
-                            .getGenericSuperclass())
-                            .getActualTypeArguments()[0]));
+            mapper = new DecoratingStringHashMapper<>(new JacksonHashMapper<>((Class<V>) obj.getClass()));
         }
         redisTemplate.opsForHash().putAll(key, mapper.toHash(obj));
     }
@@ -67,5 +65,10 @@ public class HashCacheRedisRepository<V> implements HashCache<V> {
     @Override
     public void delete(String key) {
         redisTemplate.delete(key);
+    }
+
+    @Override
+    public void expire(String key, long time, TimeUnit timeUnit) {
+        redisTemplate.expire(key, time, timeUnit);
     }
 }

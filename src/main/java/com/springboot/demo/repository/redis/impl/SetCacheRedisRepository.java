@@ -3,12 +3,12 @@ package com.springboot.demo.repository.redis.impl;
 import com.springboot.demo.repository.redis.RedisJsonMapper;
 import com.springboot.demo.repository.redis.SetCache;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by himanshu.virmani on 04/06/16.
@@ -59,5 +59,10 @@ public class SetCacheRedisRepository<V extends RedisJsonMapper> implements SetCa
     @Override
     public void delete(String key) {
         redisTemplate.delete(key);
+    }
+
+    @Override
+    public void expire(String key, long time, TimeUnit timeUnit) {
+        redisTemplate.expire(key, time, timeUnit);
     }
 }

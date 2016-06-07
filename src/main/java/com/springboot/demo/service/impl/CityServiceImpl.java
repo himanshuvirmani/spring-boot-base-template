@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.util.concurrent.TimeUnit;
+
 @Component("cityService")
 @Transactional
 public class CityServiceImpl implements CityService {
@@ -64,7 +66,10 @@ public class CityServiceImpl implements CityService {
 
         if (city == null) {
             city = cityRepository.findByNameAndCountryAllIgnoringCase(name, country);
-            if (city != null) valueCacheRedisRepository.multiPut("city:" + name + ":country:" + country, city);
+            if (city != null) {
+                valueCacheRedisRepository.multiPut("city:" + name + ":country:" + country, city);
+                valueCacheRedisRepository.expire("city:" + name + ":country:" + country, 60, TimeUnit.SECONDS);
+            }
         }
         return city;
     }

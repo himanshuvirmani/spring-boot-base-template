@@ -1,6 +1,8 @@
 package com.springboot.demo.repository.redis;
 
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by himanshu.virmani on 04/06/16.
  */
@@ -16,4 +18,6 @@ public interface HashCache<V> {
     V multiGet(String key, Class<V> clazz);
 
     void delete(String key);
+
+    void expire(String key, long time, TimeUnit timeUnit);
 }

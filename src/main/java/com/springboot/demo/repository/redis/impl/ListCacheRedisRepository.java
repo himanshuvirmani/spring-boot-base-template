@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by himanshu.virmani on 04/06/16.
@@ -82,5 +83,10 @@ public class ListCacheRedisRepository<V extends RedisJsonMapper> implements List
     @Override
     public Long size(String key) {
         return redisTemplate.opsForList().size(key);
+    }
+
+    @Override
+    public void expire(String key, long time, TimeUnit timeUnit) {
+        redisTemplate.expire(key, time, timeUnit);
     }
 }
