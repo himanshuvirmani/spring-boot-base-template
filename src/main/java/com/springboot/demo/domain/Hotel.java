@@ -71,4 +71,8 @@ public class Hotel implements Serializable {
     public String getZip() {
         return this.zip;
     }
+
+    public Long getId() {
+        return this.id;
+    }
 }

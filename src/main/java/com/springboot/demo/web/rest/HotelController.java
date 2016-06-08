@@ -18,9 +18,11 @@ package com.springboot.demo.web.rest;
 
 import com.springboot.demo.domain.City;
 import com.springboot.demo.domain.Hotel;
+import com.springboot.demo.domain.Rating;
 import com.springboot.demo.domain.Review;
 import com.springboot.demo.service.CityService;
 import com.springboot.demo.service.HotelService;
+import com.springboot.demo.service.ReviewsSummary;
 import com.springboot.demo.web.rest.dto.ReviewDetailsDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/hotel")
@@ -77,5 +81,16 @@ public class HotelController extends BaseController {
         final City citi = cityService.getCity(city, country);
         log.info("Review Details date : - " + reviewDetails.toString());
         return this.hotelService.addReview(this.hotelService.getHotel(citi, hotel), reviewDetails);
+    }
+
+    @RequestMapping(value = "/city/{city}/country/{country}/hotel/{hotel}/review_summary",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @Transactional(readOnly = true)
+    public Long getReviewSummary(@PathVariable("city") String city,
+                                 @PathVariable("country") String country, @PathVariable("hotel") String hotel) {
+        final City citi = cityService.getCity(city, country);
+        return this.hotelService.getReviewSummary(this.hotelService.getHotel(citi, hotel)).getNumberOfReviewsWithRating(Rating.AVERAGE);
     }
 }

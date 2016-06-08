@@ -5,6 +5,7 @@ import com.springboot.demo.domain.HotelSummary;
 import com.springboot.demo.repository.CityRepository;
 import com.springboot.demo.repository.HotelRepository;
 import com.springboot.demo.repository.redis.impl.HashCacheRedisRepository;
+import com.springboot.demo.repository.redis.impl.ListCacheRedisRepository;
 import com.springboot.demo.repository.redis.impl.ValueCacheRedisRepository;
 import com.springboot.demo.service.CityService;
 import com.springboot.demo.service.criteria.CitySearchCriteria;

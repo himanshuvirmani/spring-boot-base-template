@@ -16,26 +16,51 @@
 
 package com.springboot.demo.domain;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.demo.repository.redis.RedisJsonMapper;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.io.IOException;
 import java.io.Serializable;
 
-public class RatingCount implements Serializable {
+@NoArgsConstructor
+@Getter
+@Setter
+public class RatingCount implements Serializable,RedisJsonMapper {
 
     private static final long serialVersionUID = 1L;
 
-    private final Rating rating;
+    private Rating rating;
 
-    private final long count;
+    private long count;
 
     public RatingCount(Rating rating, long count) {
         this.rating = rating;
         this.count = count;
     }
 
-    public Rating getRating() {
-        return this.rating;
+    @Override
+    public String toJsonString() {
+        final ObjectMapper jacksonObjectMapper = new ObjectMapper();
+        try {
+            return jacksonObjectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public long getCount() {
-        return this.count;
+    @Override
+    public RatingCount fromJson(String json) {
+        final ObjectMapper jacksonObjectMapper = new ObjectMapper();
+        try {
+            return jacksonObjectMapper.readValue(json, RatingCount.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

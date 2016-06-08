@@ -3,6 +3,7 @@ package com.springboot.demo.service.impl;
 import com.springboot.demo.domain.*;
 import com.springboot.demo.repository.HotelRepository;
 import com.springboot.demo.repository.ReviewRepository;
+import com.springboot.demo.repository.redis.impl.ListCacheRedisRepository;
 import com.springboot.demo.service.HotelService;
 import com.springboot.demo.service.ReviewsSummary;
 import com.springboot.demo.web.rest.dto.ReviewDetailsDto;
@@ -13,13 +14,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Component("hotelService")
 @Transactional
 public class HotelServiceImpl implements HotelService {
+
+    @Autowired
+    private ListCacheRedisRepository<RatingCount> ratingCountListCacheRedisRepository;
 
     private final HotelRepository hotelRepository;
 
@@ -59,8 +62,17 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public ReviewsSummary getReviewSummary(Hotel hotel) {
-        List<RatingCount> ratingCounts = this.hotelRepository.findRatingCounts(hotel);
-        return new ReviewsSummaryImpl(ratingCounts);
+        Collection<RatingCount> ratingCounts = ratingCountListCacheRedisRepository.get("ratingcounts:hotel:" + hotel.getId(), RatingCount.class);
+
+        if (ratingCounts == null || ratingCounts.isEmpty()) {
+            ratingCounts = this.hotelRepository.findRatingCounts(hotel);
+            if (ratingCounts != null) {
+                ratingCountListCacheRedisRepository.multiAdd("ratingcounts:hotel:" + hotel.getId(),ratingCounts, true);
+                ratingCountListCacheRedisRepository.expire("ratingcounts:hotel:" + hotel.getId(), 60, TimeUnit.SECONDS);
+            }
+        }
+
+        return new ReviewsSummaryImpl(new ArrayList<>(ratingCounts));
     }
 
     private static class ReviewsSummaryImpl implements ReviewsSummary {
@@ -68,7 +80,7 @@ public class HotelServiceImpl implements HotelService {
         private final Map<Rating, Long> ratingCount;
 
         public ReviewsSummaryImpl(List<RatingCount> ratingCounts) {
-            this.ratingCount = new HashMap<Rating, Long>();
+            this.ratingCount = new HashMap<>();
             for (RatingCount ratingCount : ratingCounts) {
                 this.ratingCount.put(ratingCount.getRating(), ratingCount.getCount());
             }
