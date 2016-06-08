@@ -1,8 +1,6 @@
 package com.springboot.demo.repository.redis.impl;
 
 import com.springboot.demo.repository.redis.HashCache;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.hash.DecoratingStringHashMapper;
@@ -10,7 +8,6 @@ import org.springframework.data.redis.hash.HashMapper;
 import org.springframework.data.redis.hash.JacksonHashMapper;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -23,8 +20,6 @@ public class HashCacheRedisRepository<V> implements HashCache<V> {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
-
-    private final Logger log = LoggerFactory.getLogger(HashCacheRedisRepository.class);
 
     private HashMapper<V, String, String> mapper;
 

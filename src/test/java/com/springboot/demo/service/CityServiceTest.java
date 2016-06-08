@@ -41,7 +41,7 @@ public class CityServiceTest extends AbstractTest {
 
     @Test
     public void testSearchCities() {
-        PageRequest pageRequest = new PageRequest(1, 4);
+        PageRequest pageRequest = new PageRequest(0, 4);
         when(cityRepository.findByNameContainingAndCountryContainingAllIgnoringCase
                 ("Test", "", pageRequest)) //we can also use Mockito.any etc if response is independent.
                 .thenReturn(getEntityListStubData());

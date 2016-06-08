@@ -41,7 +41,7 @@ public class CityController extends BaseController {
     @Transactional(readOnly = true)
     public Page<City> search(@PathVariable("keyword") String keyword) {
         CitySearchCriteria criteria = new CitySearchCriteria(keyword);
-        PageRequest pageRequest = new PageRequest(1, 4);
+        PageRequest pageRequest = new PageRequest(0, 4);
         Page<City> result = this.cityService.findCities(criteria, pageRequest);
         if (result == null || result.getTotalElements() == 0) {
             throw new CityNotFoundException();

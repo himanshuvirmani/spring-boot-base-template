@@ -64,7 +64,7 @@ public class HotelController extends BaseController {
     public Page<Review> getHotelReview(@PathVariable("city") String city,
                                        @PathVariable("country") String country, @PathVariable("hotel") String hotel) {
         final City citi = cityService.getCity(city, country);
-        PageRequest pageRequest = new PageRequest(1, 4);
+        PageRequest pageRequest = new PageRequest(0, 4);
         log.info("Cache time config value " + cacheTime);
         return this.hotelService.getReviews(this.hotelService.getHotel(citi, hotel), pageRequest);
     }

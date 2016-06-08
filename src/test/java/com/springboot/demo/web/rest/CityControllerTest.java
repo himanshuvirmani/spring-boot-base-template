@@ -49,7 +49,7 @@ public class CityControllerTest extends AbstractControllerTest {
     public void shouldSearchCity() throws Exception {
 
         CitySearchCriteria criteria = new CitySearchCriteria("T");
-        PageRequest pageRequest = new PageRequest(1, 4);
+        PageRequest pageRequest = new PageRequest(0, 4);
         // Create some test data
         Page<City> list = getEntityListStubData();
 
